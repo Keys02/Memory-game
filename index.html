@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Computer Setup Memory Game</title>
+    </head>
+    <style>
+        *{
+            box-sizing:border-box
+        }
+        
+        body{
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            font-family:poppins, Helvetica, sans-serif
+        }
+
+        div#container {
+            display:grid;
+            grid-template-columns:200px 200px 200px;
+            grid-template-rows:200px 200px;
+            grid-gap:10px;  
+        }
+
+        div.card {
+            background-color:rgb(19, 112, 19);
+            cursor:pointer;
+            box-shadow: -1px 1px 2px 1px grey
+        }
+
+        img.my_image {
+            width:200px;
+            height:200px;
+        }
+        </style>
+<body>
+    <h1>MEMORY GAME</h1>
+    <div id="container">
+    <div class="card first_card"></div>
+    <div class="card second_card"></div>
+    <div class="card third_card"></div>
+    <div class="card fourth_card"></div>
+    <div class="card fifth_card"></div>
+    <div class="card sixth_card"></div>
+    </div>
+    <h3>Score: <span class="score">0</span></h3>
+    <h3>Failed Attempts: <span class="failed-attempts">0</span></h3>
+
+    <script>
+        const cards = document.querySelectorAll(".card");
+        const score = document.querySelector(".score");
+        const failedAttempts = document.querySelector(".failed-attempts");
+
+        let images = [
+            {image:"1.jpg"}, 
+            {image:"2.jpg"},
+            {image:"3.jpg"},
+            {image:"4.jpg"},
+            {image:"5.jpeg"},
+            {image:"6.jpg"}
+        ]
+        let scoreCounter = 0
+        let failedAttemptsCounter = 0
+        let selectedCards = []
+        let selectedImages = []
+
+        function generateRandNum(){
+            return Math.floor(Math.random() * 6);
+        }
+        
+        Array.from(cards).forEach(function(card){
+            card.addEventListener("click", gameStart)
+            function gameStart(){
+                if(card.innerHTML){
+                    return
+                }
+                else{
+                    flipCards(this)
+                    matchCards(this)
+                }
+            }
+        })  
+
+        function flipCards(card){
+            let generatedImg = images[generateRandNum()]["image"]
+                let imgEl = `<img class="my_image" src="images/${generatedImg}">`;            
+                    card.innerHTML = imgEl
+        }
+
+        function matchCards(card){
+            setTimeout(function(){
+            selectedCards.push(card)
+            if(selectedCards.length == 2){
+                for(let i=0; i<selectedCards.length; i++){
+                    selectedImages.push(selectedCards[i].firstElementChild.getAttribute("src"))
+                    }
+                if(selectedImages[0]==selectedImages[1]){
+                    alert("You found a match!!")
+                    selectedCards[0].firstElementChild.remove()
+                    selectedCards[1].firstElementChild.remove()
+                    scoreCounter++             
+                    score.textContent=scoreCounter
+                }else{
+                    selectedCards[0].firstElementChild.remove()
+                    selectedCards[1].firstElementChild.remove()
+                    failedAttemptsCounter++    
+                    failedAttempts.textContent = failedAttemptsCounter
+                } 
+            selectedCards = []
+            selectedImages = []        
+                }
+            },500)  
+            }
+
+        </script>
+</body>
+</html>
