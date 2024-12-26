@@ -25,7 +25,7 @@
     }
 
     div.card {
-      background-color: rgb(19, 112, 19);
+      background-color: #3587A4;
       cursor: pointer;
       box-shadow: -1px 1px 2px 1px grey;
     }
@@ -35,6 +35,13 @@
       animation-duration: 1s;
       animation-fill-mode: forwards;
     }
+
+    .unflip {
+        animation-name: unflip;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
 
     img.my_image {
       width: 200px;
@@ -51,6 +58,15 @@
       to {
         transform: rotateY(-180deg);
       }
+    }
+
+    @keyframes unflip {
+        from {
+            transform: rotateY(-180deg);
+        }
+        to {
+            transform: rotateY(0deg);
+        }
     }
   </style>
   <body>
@@ -70,6 +86,8 @@
       const cards = document.querySelectorAll(".card");
       const score = document.querySelector(".score");
       const failedAttempts = document.querySelector(".failed-attempts");
+
+      let flipped = false;
 
       let images = [
         { image: "1.jpg" },
@@ -111,6 +129,15 @@
         },500)
       }
 
+
+      function unflipCards(card){
+        card.classList.add("unflip")
+        
+        setTimeout(function(){
+            card.classList.remove("unflip")
+        },500)
+      }
+
       function matchCards(card) {
         setTimeout(function () {
           selectedCards.push(card);
@@ -132,10 +159,15 @@
               failedAttemptsCounter++;
               failedAttempts.textContent = failedAttemptsCounter;
             }
+
+            unflipCards(selectedCards[0])
+            unflipCards(selectedCards[1])
+
             selectedCards = [];
             selectedImages = [];
           }
         }, 1200);
+        flipped = false
       }
     </script>
   </body>
